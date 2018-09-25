@@ -37,11 +37,7 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include <string.h>
 
-// TODO: include depending on chip family
-//#include "stm32f1xx_hal.h"
-//#include "stm32f2xx_hal.h"
-//#include "stm32f3xx_hal.h"
-#include "stm32f4xx_hal.h"
+#include "stm32x_hal/stm32x_hal.h"
 
 typedef int bool;
 #define true 1

@@ -1,0 +1,3 @@
+[submodule "stm32x_hal"]
+	path = STM32/I2Cdev/stm32x_hal
+	url = https://github.com/standmit/stm32x_hal
