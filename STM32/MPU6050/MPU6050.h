@@ -407,6 +407,10 @@ THE SOFTWARE.
 #define MPU6050_DMP_MEMORY_BANK_SIZE    256
 #define MPU6050_DMP_MEMORY_CHUNK_SIZE   16
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // note: DMP code memory blocks defined at end of header file
 void MPU6050_setAddress(uint8_t address);
 void MPU6050_initialize();
@@ -782,6 +786,10 @@ void MPU6050_setDMPConfig1(uint8_t config);
 // DMP_CFG_2 register
 uint8_t MPU6050_getDMPConfig2();
 void MPU6050_setDMPConfig2(uint8_t config);
+
+#ifdef __cplusplus
+}
+#endif
 
 // special methods for MotionApps 2.0 implementation
 #ifdef MPU6050_INCLUDE_DMP_MOTIONAPPS20
