@@ -39,14 +39,18 @@ THE SOFTWARE.
 
 #include "stm32x_hal/stm32x_hal.h"
 
+// 1000ms default read timeout (modify with "I2Cdev::readTimeout = [ms];")
+#define I2CDEV_DEFAULT_READ_TIMEOUT     1000
+
+#ifndef __cplusplus
 typedef int bool;
+#endif
 #define true 1
 #define false 0
 
-uint16_t I2Cdev_readTimeout;
-
-// 1000ms default read timeout (modify with "I2Cdev::readTimeout = [ms];")
-#define I2CDEV_DEFAULT_READ_TIMEOUT     1000
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void I2Cdev_init(I2C_HandleTypeDef * hi2c);
 
@@ -67,5 +71,9 @@ uint16_t I2Cdev_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data);
 uint16_t I2Cdev_writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data);
 uint16_t I2Cdev_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_t *data);
 uint16_t I2Cdev_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint16_t *data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _I2CDEV_H_ */

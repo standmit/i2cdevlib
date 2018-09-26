@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 // Hold pointer to inited HAL I2C device
 static I2C_HandleTypeDef * I2Cdev_hi2c;
+HAL_StatusTypeDef I2C_status;
 
 /** Default timeout value for read operations.
  * Set this to 0 to disable timeout detection.
@@ -168,10 +169,18 @@ uint8_t I2Cdev_readWord(uint8_t devAddr, uint8_t regAddr, uint16_t *data, uint16
  */
 uint8_t I2Cdev_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_t *data, uint16_t timeout)
 {
+	if (length == 0)
+		return length;
+
     uint16_t tout = timeout > 0 ? timeout : I2CDEV_DEFAULT_READ_TIMEOUT;
 
-    HAL_I2C_Master_Transmit(I2Cdev_hi2c, devAddr << 1, &regAddr, 1, tout);
+    I2C_status = HAL_I2C_Mem_Read(I2Cdev_hi2c, devAddr << 1, regAddr, I2C_MEMADD_SIZE_8BIT, data, length, tout);
+    if (I2C_status == HAL_OK)
+    	return length;
+    /*
+    HAL_I2C_Master_Transmit(I2Cdev_hi2c, devAddr << 1, regAddr, 1, tout);
     if (HAL_I2C_Master_Receive(I2Cdev_hi2c, devAddr << 1, data, length, tout) == HAL_OK) return length;
+    */
     return -1;
 }
 
@@ -185,12 +194,20 @@ uint8_t I2Cdev_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8
  */
 uint8_t I2Cdev_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint16_t *data, uint16_t timeout)
 {
+	if (length == 0)
+		return length;
+
     uint16_t tout = timeout > 0 ? timeout : I2CDEV_DEFAULT_READ_TIMEOUT;
 
+    I2C_status = HAL_I2C_Mem_Read(I2Cdev_hi2c, devAddr << 1, regAddr, I2C_MEMADD_SIZE_8BIT, (uint8_t *)data, length*2, tout);
+    if (I2C_status == HAL_OK)
+		return length;
+    /*
     HAL_I2C_Master_Transmit(I2Cdev_hi2c, devAddr << 1, &regAddr, 1, tout);
     if (HAL_I2C_Master_Receive(I2Cdev_hi2c, devAddr << 1, (uint8_t *)data, length*2, tout) == HAL_OK)
         return length;
     else
+    */
         return -1;
 }
 
@@ -321,8 +338,11 @@ uint16_t I2Cdev_writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data)
  */
 uint16_t I2Cdev_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_t* pData)
 {
-    HAL_StatusTypeDef status = HAL_I2C_Mem_Write(I2Cdev_hi2c, devAddr << 1, regAddr, I2C_MEMADD_SIZE_8BIT, pData, length, 1000);
-    return status == HAL_OK;
+	if (length == 0)
+		return true;
+
+    I2C_status = HAL_I2C_Mem_Write(I2Cdev_hi2c, devAddr << 1, regAddr, I2C_MEMADD_SIZE_8BIT, pData, length, 1000);
+    return I2C_status == HAL_OK;
 }
 
 /** Write multiple words to a 16-bit device register.
@@ -334,6 +354,9 @@ uint16_t I2Cdev_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uin
  */
 uint16_t I2Cdev_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint16_t* pData)
 {
-    HAL_StatusTypeDef status = HAL_I2C_Mem_Write(I2Cdev_hi2c, devAddr << 1, regAddr, I2C_MEMADD_SIZE_8BIT, (uint8_t *)pData, sizeof(uint16_t) * length, 1000);
-    return status == HAL_OK;
+	if (length == 0)
+		return true;
+
+    I2C_status = HAL_I2C_Mem_Write(I2Cdev_hi2c, devAddr << 1, regAddr, I2C_MEMADD_SIZE_8BIT, (uint8_t *)pData, sizeof(uint16_t) * length, 1000);
+    return I2C_status == HAL_OK;
 }
