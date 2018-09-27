@@ -42,19 +42,16 @@ class Quaternion {
         float y;
         float z;
         
-        Quaternion() {
-            w = 1.0f;
-            x = 0.0f;
-            y = 0.0f;
-            z = 0.0f;
-        }
-        
-        Quaternion(float nw, float nx, float ny, float nz) {
-            w = nw;
-            x = nx;
-            y = ny;
-            z = nz;
-        }
+        Quaternion(float nw, float nx, float ny, float nz):
+				w(nw),
+				x(nx),
+				y(ny),
+				z(nz)
+        { }
+
+        Quaternion():
+        		Quaternion(1.0f, 0.0f, 0.0f, 0.0f)
+        { }
 
         Quaternion getProduct(Quaternion q) {
             // Quaternion multiplication is defined by:
@@ -90,7 +87,20 @@ class Quaternion {
             r.normalize();
             return r;
         }
+
+        Quaternion inverse() const {
+        	return Quaternion(-w, -x, -y, -z);
+        }
 };
+
+inline Quaternion operator*(const Quaternion& q1, const Quaternion& q2) {
+	return Quaternion(
+			q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+			q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z,
+			q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x,
+			q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z
+	);
+}
 
 class VectorInt16 {
     public:
