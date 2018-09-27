@@ -280,6 +280,17 @@ const unsigned char dmpUpdates[MPU6050_DMP_UPDATES_SIZE] = {
     0x00,   0x60,   0x04,   0x00, 0x40, 0x00, 0x00
 };
 
+#define MPU6050_FIFO_ORIENT_W 0
+#define MPU6050_FIFO_ORIENT_X 4
+#define MPU6050_FIFO_ORIENT_Y 8
+#define MPU6050_FIFO_ORIENT_Z 12
+#define MPU6050_FIFO_GYRO_X 16
+#define MPU6050_FIFO_GYRO_Y 20
+#define MPU6050_FIFO_GYRO_Z 24
+#define MPU6050_FIFO_ACCEL_X 28
+#define MPU6050_FIFO_ACCEL_Y 32
+#define MPU6050_FIFO_ACCEL_Z 36
+
 uint8_t MPU6050_dmpInitialize() {
     // reset device
     DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
